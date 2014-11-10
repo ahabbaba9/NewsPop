@@ -2,13 +2,15 @@ package com.ariana.newspop;
 
 import java.util.Date;
 
+import android.graphics.drawable.Drawable;
+
 public class Article {
 	
 	private String title;
 	private String author;
 	private Date publishDate;
 	private String category;
-	private String imageUrl;
+	private Drawable image;
 	private String url;
 	
 	public String getTitle() {
@@ -41,11 +43,11 @@ public class Article {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public String getImageUrl() {
-		return imageUrl;
+	public Drawable getImage() {
+		return image;
 	}
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setImage(Drawable image) {
+		this.image = image;
 	}
 
 }
