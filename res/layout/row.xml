@@ -3,10 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <!-- I kept images so small because they'd lose clarity if they were bigger.
+    Original image size is 75x75 px -->
+    
     <ImageView
         android:id="@+id/articleImage"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="125dp"
         android:layout_alignParentRight="true"
         android:background="#000000"
         android:contentDescription="@string/image_desc"
@@ -14,12 +17,11 @@
     
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/articleImage"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_alignParentLeft="true"
-        android:maxLength="30"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
         android:ellipsize="marquee"
@@ -27,10 +29,11 @@
 
     <TextView
         android:id="@+id/author"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignBottom="@+id/articleImage"
+        android:singleLine="true"
         android:textColor="#FFFFFF"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -48,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
-        android:layout_alignBottom="@+id/articleImage"
+        android:layout_alignBaseline="@id/category"
         android:layout_alignParentRight="true"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 

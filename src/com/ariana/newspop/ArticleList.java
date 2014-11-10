@@ -23,10 +23,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class ArticleList extends ListActivity {
+import com.ariana.newspop.http.AsyncResponse;
+import com.ariana.newspop.http.RequestTask;
+
+public class ArticleList extends ListActivity implements AsyncResponse {
 
 	private String json;
-
+	private Menu myMenu;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,21 +78,49 @@ public class ArticleList extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+		// This adds the refresh button to the action bar menu
 		getMenuInflater().inflate(R.menu.article_list, menu);
+		myMenu = menu;
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+		// When we select the refresh button, we want to caoll the NYT API
+		// & reload the list of articles
+		
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		
+		if (id == R.id.action_refresh) {
+			setRefreshActionButtonState(true);
+			RequestTask asyncTask = new RequestTask();
+			asyncTask.delegate = this;
+			
+			String apiKey = "d8b8cf516b306681ac2f020882cf225e:4:70149274";
+			String resourceType = "mostviewed";
+			String timePeriod = "30"; //days
+
+			String url = "http://api.nytimes.com/svc/mostpopular/v2/" + resourceType + 
+					"/all-sections/" + timePeriod + "?api-key=" + apiKey;
+			
+			asyncTask.execute(url);
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void setRefreshActionButtonState(final boolean refreshing) {
+		// Here we will animate the progress bar to indicate that a refresh is occurring
+	    if (myMenu != null) {
+	        final MenuItem refreshItem = myMenu
+	            .findItem(R.id.action_refresh);
+	        if (refreshItem != null) {
+	            if (refreshing) {
+	                refreshItem.setActionView(R.layout.progress_cirle);
+	            } else {
+	                refreshItem.setActionView(null);
+	            }
+	        }
+	    }
 	}
 
 	/*********************************************************
@@ -141,6 +173,7 @@ public class ArticleList extends ListActivity {
 						}
 
 						article.setAuthor(author);
+						
 						// Title
 						article.setTitle((String) obj.get("title"));
 
@@ -152,7 +185,7 @@ public class ArticleList extends ListActivity {
 						JSONArray images = (JSONArray) mediaMeta.get("media-metadata");
 
 						// Article image
-						JSONObject image = (JSONObject) images.get(0);
+						JSONObject image = (JSONObject) images.get(7);
 						String mediaUrl = (String) image.get("url");
 
 						// Retrieve image from URL
@@ -189,5 +222,15 @@ public class ArticleList extends ListActivity {
 			((ArticleAdapter)getListAdapter()).notifyDataSetChanged();
 		}
 
+	}
+
+	@Override
+	public void processFinish(String output) {
+		// Retrieve articles asynchronously & update ListView
+		new ArticleRetrievalTask().execute(new String[] {json});
+		Intent intent = getIntent();
+		finish();
+	    startActivity(intent);
+	    overridePendingTransition(0,0);
 	}
 }
