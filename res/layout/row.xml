@@ -33,6 +33,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignBottom="@+id/articleImage"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
+        android:shadowColor="#000000"
         android:singleLine="true"
         android:textColor="#FFFFFF"
         android:textAppearance="?android:attr/textAppearanceSmall" />
