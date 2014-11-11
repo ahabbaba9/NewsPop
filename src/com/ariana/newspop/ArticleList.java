@@ -14,7 +14,6 @@ import org.json.simple.parser.ParseException;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -68,11 +67,12 @@ public class ArticleList extends ListActivity implements AsyncResponse {
 	}
 
 	public void goToWebPage(View view, Article article) {
-		// When article is tapped, it will open a new browser
-		// which will redirect to the article page
+		// When article is tapped, it will open a new WebView
+		// to display the article page
 
-		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(article.getUrl()));
-		startActivity(browserIntent);
+		Intent i = new Intent(ArticleList.this, WebViewActivity.class);
+		i.putExtra("ArticleUrl", article.getUrl());
+		startActivity(i);
 	}
 
 
